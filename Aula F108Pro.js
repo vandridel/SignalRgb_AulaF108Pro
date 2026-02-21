@@ -100,19 +100,19 @@ function refresh()
 {
     let Delay_ms = Number(DelayMs);
 	let packet = new Array(65).fill(0);
-	device.write(packet, 65);
+	device.send_report(packet, 65);
 	device.pause(Delay_ms);
 	//-----------------------------
 	//从抓包看 是发了俩个空数据
-	 device.write(packet, 65);
+	 device.send_report(packet, 65);
 	 device.pause(Delay_ms);
 	//-----------------------------
 	packet[1] = 0x04;
 	packet[2] = 0x02;
-	device.write(packet, 65);
+	device.send_report(packet, 65);
 	device.pause(Delay_ms);
 	let data = new Array(65).fill(0);
-	device.read(data,65);
+	device.get_report(data,65);
 	device.pause(Delay_ms);
 
 }
@@ -123,13 +123,13 @@ function start_refresh()
 	packet[1] = 0x04;
 	packet[2] = 0x20;
 	packet[9] = 0x08;
-	device.write(packet, 65);
+	device.send_report(packet, 65);
 	device.pause(DelayMs);
 	let data = new Array(65).fill(0);
-	device.read(data,65);
+	device.get_report(data,65);
 	device.pause(DelayMs);
 	
-	 device.write(data,1);
+	 device.send_report(data,1);
 }
 
 
@@ -176,7 +176,7 @@ function sendColors(shutdown = false)
 		let packet = [0x00];
 		packet.push(...send_data.splice(0, 64));
 		// device.log(packet, {toFile: true});
-		device.write(packet, 65);
+		device.send_report(packet, 65);
 		device.pause(DelayMs);
 	}	
 	refresh();
@@ -227,7 +227,7 @@ function hexToRgb(hex)
 }
 
 export function Validate(endpoint) {
-	return endpoint.usage === 0x0061 && endpoint.interface === 3 && endpoint.usage_page === 0xff60;
+	return endpoint.usage === 0x0061 && endpoint.interface === 4 && endpoint.usage_page === 0xff59;
 }
 
 export function Image() {
